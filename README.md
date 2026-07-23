@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # final_project
 
 A new Flutter project.
@@ -15,3 +16,7 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+=======
+# songkrous
+Mobile incident reporting app — Blue Team cybersecurity project
+>>>>>>> 0683f0f14f02bdea0f0fcb6f89461425ac1666da
