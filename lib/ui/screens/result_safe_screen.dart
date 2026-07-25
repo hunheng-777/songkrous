@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class ResultDangerScreen extends StatelessWidget {
-  const ResultDangerScreen({super.key});
+class ResultSafeScreen extends StatelessWidget {
+  const ResultSafeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE9E2D6), // cream
+      backgroundColor: const Color(0xFFE9E2D6),
       appBar: AppBar(
         backgroundColor: const Color(0xFFE9E2D6),
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black87),
-       
+        
+        iconTheme: const IconThemeData(color: Colors.black),
+        
       ),
       body: Column(
         children: [
@@ -19,16 +19,15 @@ class ResultDangerScreen extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.only(top: 40, bottom: 40),
             decoration: const BoxDecoration(
-              color: Color(0xFFB23B3B), 
-              
-              
+              color: Color(0xFF5B8C6E),
+          
             ),
             child: Column(
               children: const [
-                Icon(Icons.cancel, color: Colors.white, size: 80),
+                Icon(Icons.check_circle, color: Colors.white, size: 80),
                 SizedBox(height: 16),
                 Text(
-                  "Dangerous Link",
+                  "Safe Link",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 26,
@@ -37,7 +36,7 @@ class ResultDangerScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  "This URL is unsafe. Do not visit.",
+                  "This URL appears to be safe.",
                   style: TextStyle(color: Colors.white70, fontSize: 14),
                 ),
               ],
@@ -46,14 +45,13 @@ class ResultDangerScreen extends StatelessWidget {
 
           const SizedBox(height: 30),
 
-         
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.only(left: 24, right: 24),
             child: Column(
               children: [
-                _detailRow("Status", "Dangerous", const Color(0xFFB23B3B)),
-                _detailRow("Threat Type", "Phishing", Colors.black87),
-                _detailRow("Detections", "15/90 Vendors", Colors.black87),
+                _detailRow("Status", "Safe", const Color(0xFF5B8C6E)),
+                _detailRow("Protocol", "HTTPS", Colors.black87),
+                _detailRow("Domain", "google.com", Colors.black87),
                 _detailRow("Scanned", "26 Jun 2026", Colors.black87),
               ],
             ),
@@ -63,7 +61,6 @@ class ResultDangerScreen extends StatelessWidget {
     );
   }
 
-  
   Widget _detailRow(String label, String value, Color valueColor) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
