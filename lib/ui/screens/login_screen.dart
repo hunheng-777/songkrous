@@ -1,9 +1,50 @@
+import 'dart:convert';
+
 import 'package:final_project/ui/screens/home_screen.dart';
 import 'package:final_project/ui/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  String errorMessage = "";
+  Future<void> login() async {
+    final url = Uri.parse(
+      "https://final-project-71fa9-default-rtdb.asia-southeast1.firebasedatabase.app/users.json",
+    );
+
+    final response = await http.get(url);
+    final data = jsonDecode(response.body) as Map;
+
+    bool found = false;
+
+    for (var user in data.values) {
+      if (user["email"] == emailController.text &&
+          user["password"] == passwordController.text) {
+        found = true;
+        break;
+      }
+    }
+
+    if (found) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+    } else {
+      setState(() {
+        errorMessage = "Wrong email or password";
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,9 +118,7 @@ class LoginScreen extends StatelessWidget {
                   // we add login later
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const HomeScreen(),
-                    ),
+                    MaterialPageRoute(builder: (context) => const HomeScreen()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
