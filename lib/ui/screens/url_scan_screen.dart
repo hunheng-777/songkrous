@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/recent_item.dart';
-
+import 'result_safe_screen.dart';
+import 'result_danger_screen.dart';
+import '../../services/url_check_service.dart';
+import '../../services/url_check_service.dart';
 class UrlScanScreen extends StatefulWidget {
   const UrlScanScreen({super.key});
 
@@ -17,6 +20,9 @@ class _UrlScanScreenState extends State<UrlScanScreen> {
     {"url": "http://free-money.xyz", "status": "Danger", "time": "10m ago"},
     {"url": "https://cadt.edu.kh", "status": "Safe", "time": "25m ago"},
   ];
+
+  String errorMessage = "";
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +101,46 @@ class _UrlScanScreenState extends State<UrlScanScreen> {
                         backgroundColor: Colors.black,
                       ),
 
-                      onPressed: () {},
+                      onPressed: () async {
+                        if (urlController.text.isEmpty) {
+                          setState(() {
+                            errorMessage = "Please enter a URL";
+                          });
+
+                          return;
+                        }
+
+                        setState(() {
+                          errorMessage = "";
+                          isLoading = true;
+                        });
+
+                        UrlCheckService service = UrlCheckService();
+
+                        bool isSafe = await service.checkUrl(
+                          urlController.text.trim(),
+                        );
+
+                        setState(() {
+                          isLoading = false;
+                        });
+
+                        if (isSafe) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ResultSafeScreen(),
+                            ),
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ResultDangerScreen(),
+                            ),
+                          );
+                        }
+                      },
 
                       child: Text(
                         "Scan URL",
@@ -106,7 +151,15 @@ class _UrlScanScreenState extends State<UrlScanScreen> {
                 ),
               ],
             ),
+            SizedBox(height: 20),
+            if (isLoading)
+              const Text(
+                "Checking URL...",
+                style: TextStyle(color: Colors.red),
+              ),
 
+            if (errorMessage.isNotEmpty)
+              Text(errorMessage, style: const TextStyle(color: Colors.red)),
             SizedBox(height: 30),
 
             

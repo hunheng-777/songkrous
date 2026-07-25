@@ -1,5 +1,6 @@
 
 import 'package:final_project/ui/screens/home_screen.dart';
+import 'package:final_project/ui/screens/url_scan_screen.dart';
 import 'package:flutter/material.dart';
 import 'ui/screens/result_danger_screen.dart';
 import 'ui/screens/result_safe_screen.dart';
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const HomeScreen(),
+      home: const UrlScanScreen(),
     );
   }
 }
