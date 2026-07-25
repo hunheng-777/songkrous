@@ -20,7 +20,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool hidePassword = true;
   bool hideConfirmPassword = true;
   bool agreeTerms = false;
-
+  String errorMessage = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -180,6 +180,53 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         backgroundColor: Colors.black,
                       ),
                       onPressed: () {
+                        if (nameController.text.isEmpty ||
+                            emailController.text.isEmpty ||
+                            passwordController.text.isEmpty ||
+                            confirmPasswordController.text.isEmpty) {
+                          setState(() {
+                            errorMessage = "Please fill all fields";
+                          });
+
+                          return;
+                        }
+
+                        if (!emailController.text.contains("@") ||
+                            !emailController.text.contains(".")) {
+                          setState(() {
+                            errorMessage = "Invalid Email";
+                          });
+
+                          return;
+                        }
+
+                        if (passwordController.text.length < 6) {
+                          setState(() {
+                            errorMessage =
+                                "Password must be at least 6 characters";
+                          });
+
+                          return;
+                        }
+
+                        if (passwordController.text !=
+                            confirmPasswordController.text) {
+                          setState(() {
+                            errorMessage = "Passwords do not match";
+                          });
+
+                          return;
+                        }
+
+                        if (!agreeTerms) {
+                          setState(() {
+                            errorMessage =
+                                "Please agree to Terms & Privacy Policy";
+                          });
+
+                          return;
+                        }
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -196,7 +243,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ],
             ),
+            SizedBox(height: 10),
 
+            if (errorMessage.isNotEmpty)
+              Text(
+                errorMessage,
+                style: TextStyle(color: Colors.red, fontSize: 14),
+              ),
             SizedBox(height: 20),
 
             Row(
