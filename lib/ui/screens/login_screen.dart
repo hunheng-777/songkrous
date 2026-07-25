@@ -77,7 +77,9 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 24),
 
             TextField(
+              controller: emailController,
               decoration: InputDecoration(
+                
                 hintText: "Email",
                 filled: true,
                 fillColor: Colors.white,
@@ -87,6 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 16),
 
             TextField(
+              controller: passwordController,
               obscureText: true,
               decoration: InputDecoration(
                 hintText: "Password",
@@ -114,16 +117,11 @@ class _LoginScreenState extends State<LoginScreen> {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {
-                  // we add login later
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomeScreen()),
-                  );
-                },
+                onPressed: login,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF1C1C1C),
                 ),
+                
                 child: const Text(
                   "Sign In",
                   style: TextStyle(color: Colors.white),
@@ -132,6 +130,16 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
 
             const SizedBox(height: 20),
+            Text(
+              errorMessage,
+              style: const TextStyle(
+                color: Color(0xFFB23B3B), // red
+
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 20),
+
 
             // Sign up
             Row(

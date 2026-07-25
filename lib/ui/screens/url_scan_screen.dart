@@ -4,7 +4,7 @@ import '../widgets/recent_item.dart';
 import 'result_safe_screen.dart';
 import 'result_danger_screen.dart';
 import '../../services/url_check_service.dart';
-import '../../services/url_check_service.dart';
+
 class UrlScanScreen extends StatefulWidget {
   const UrlScanScreen({super.key});
 
