@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/recent_item.dart';
+
 class UrlScanScreen extends StatefulWidget {
   const UrlScanScreen({super.key});
 
@@ -118,37 +120,29 @@ class _UrlScanScreenState extends State<UrlScanScreen> {
             ),
 
             SizedBox(height: 10),
-
-            
-            Expanded(
-              child: ListView.builder(
-                itemCount: recentScans.length,
-
-                itemBuilder: (context, index) {
-                  
-
-                  return Card(
-                    margin: EdgeInsets.only(bottom: 10),
-
-                    child: ListTile(
-                      leading: Icon(
-                        recentScans[index]["status"] == "Safe" ? Icons.check_circle : Icons.error,
-
-                        color: recentScans[index]["status"] == "Safe" ? Colors.orange : Colors.red,
-                      ),
-
-                      title: Text(recentScans[index]["url"]!),
-
-                      subtitle: Text(
-                        "${recentScans[index]["status"]} • ${recentScans[index]["time"]}",
-                      ),
-
-                      trailing: Icon(Icons.arrow_forward_ios, size: 16),
-                    ),
-                  );
-                },
-              ),
+            const RecentItem(
+              url: "https://google.com",
+              status: "Safe",
+              statusColor: Color.fromARGB(255, 83, 223, 118),
             ),
+            const RecentItem(
+              url: "http://free-money.xyz",
+              status: "Danger",
+              statusColor: Color(0xFFB23B3B),
+            ),
+            // Expanded(
+            //   child: ListView.builder(
+            //     itemCount: allScans.length > 4 ? 4 : allScans.length, // max 4
+            //     itemBuilder: (context, index) {
+            //       final scan = allScans[index];
+            //       return RecentItem(
+            //         url: scan["url"],
+            //         status: scan["status"],
+            //         statusColor: scan["color"],
+            //       );
+            //     },
+            //   ),
+            // ),
           ],
         ),
       ),

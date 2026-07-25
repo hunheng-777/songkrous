@@ -2,6 +2,7 @@ import 'package:final_project/ui/screens/url_scan_screen.dart';
 import 'package:flutter/material.dart';
 import '../widgets/scan_card.dart';
 import '../widgets/recent_item.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -13,36 +14,46 @@ class HomeScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          
           children: [
-            const SizedBox(height: 40),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      "Hello, Rainy",
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      "Stay safe every day!",
+                      style: TextStyle(color: Color(0xFF8A8375)),
+                    ),
+                  ],
+                ),
 
-            // Greeting
-            const Text(
-              "Hello, Rain",
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ProfileScreen(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.person,
+                    color: Color(0xFFC69B54), // gold
+                    size: 32,
+                  ),
+                ),
+              ],
             ),
-            const Text(
-              "Stay safe every day!",
-              style: TextStyle(color: Color(0xFF8A8375)), 
-            ),
-          //  IconButton(
-          //     onPressed: () {
-          //       Navigator.push(
-          //         context,
-          //         MaterialPageRoute(
-          //           builder: (context) => const UrlScanScreen(),
-          //         ),
-          //       );
-          //     },
-          //     icon: const Icon(
-          //       Icons.person,
-          //       color: Color(0xFFC69B54),
-          //       size: 30,
-          //     ),
-          //   ),
-
-
             const SizedBox(height: 30),
 
             

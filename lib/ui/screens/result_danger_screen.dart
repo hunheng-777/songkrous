@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/result_row.dart';
 
 class ResultDangerScreen extends StatelessWidget {
   const ResultDangerScreen({super.key});
@@ -6,23 +7,18 @@ class ResultDangerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE9E2D6), // cream
+      backgroundColor: const Color(0xFFE9E2D6),
       appBar: AppBar(
         backgroundColor: const Color(0xFFE9E2D6),
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black87),
-       
       ),
       body: Column(
         children: [
           Container(
             width: double.infinity,
             padding: const EdgeInsets.only(top: 40, bottom: 40),
-            decoration: const BoxDecoration(
-              color: Color(0xFFB23B3B), 
-              
-              
-            ),
+            decoration: const BoxDecoration(color: Color(0xFFB23B3B)),
             child: Column(
               children: const [
                 Icon(Icons.cancel, color: Colors.white, size: 80),
@@ -46,47 +42,16 @@ class ResultDangerScreen extends StatelessWidget {
 
           const SizedBox(height: 30),
 
-         
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Column(
-              children: [
-                _detailRow("Status", "Dangerous", const Color(0xFFB23B3B)),
-                _detailRow("Threat Type", "Phishing", Colors.black87),
-                _detailRow("Detections", "15/90 Vendors", Colors.black87),
-                _detailRow("Scanned", "26 Jun 2026", Colors.black87),
+          
+           Column(
+              children: const [
+                ResultRow(label: "Status", value: "Dangerous"),
+                ResultRow(label: "Threat Type", value: "Phishing"),
+                ResultRow(label: "Detections", value: "15/90 Vendors"),
+                ResultRow(label: "Scanned", value: "26 Jun 2026"),
               ],
-            ),
+            
           ),
-        ],
-      ),
-    );
-  }
-
-  
-  Widget _detailRow(String label, String value, Color valueColor) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                label,
-                style: const TextStyle(color: Color(0xFF8A8375), fontSize: 15),
-              ),
-              Text(
-                value,
-                style: TextStyle(
-                  color: valueColor,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          const Divider(color: Color(0xFFC9C0B0)),
         ],
       ),
     );

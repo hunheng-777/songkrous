@@ -25,16 +25,8 @@ class RecentItem extends StatelessWidget {
         children: [
           Icon(Icons.circle, color: statusColor, size: 14),
           const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              url,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-          Text(
-            status,
-            style: TextStyle(color: statusColor, fontWeight: FontWeight.bold),
-          ),
+          Expanded(child: Text(url)),
+          Text(status),
         ],
       ),
     );
