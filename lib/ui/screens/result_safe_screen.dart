@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../widgets/result_row.dart';
 
-class ResultSelfScreen extends StatelessWidget {
-  const ResultSelfScreen({super.key});
+class ResultSafeScreen extends StatelessWidget {
+  const ResultSafeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +21,10 @@ class ResultSelfScreen extends StatelessWidget {
             decoration: const BoxDecoration(color:Colors.green),
             child: Column(
               children: const [
-                Icon(Icons.cancel, color: Colors.white, size: 80),
+                Icon(Icons.check, color: Colors.white, size: 80),
                 SizedBox(height: 16),
                 Text(
-                  "Dangerous Link",
+                  "Safe Link",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 26,
@@ -33,7 +33,7 @@ class ResultSelfScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  "This URL is unsafe. Do not visit.",
+                  "This URL is safe.",
                   style: TextStyle(color: Colors.white70, fontSize: 14),
                 ),
               ],
