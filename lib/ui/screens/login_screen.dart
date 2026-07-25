@@ -1,3 +1,5 @@
+import 'package:final_project/ui/screens/home_screen.dart';
+import 'package:final_project/ui/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -33,7 +35,6 @@ class LoginScreen extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            
             TextField(
               decoration: InputDecoration(
                 hintText: "Email",
@@ -44,9 +45,8 @@ class LoginScreen extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-           
             TextField(
-              obscureText: true, 
+              obscureText: true,
               decoration: InputDecoration(
                 hintText: "Password",
                 filled: true,
@@ -55,27 +55,32 @@ class LoginScreen extends StatelessWidget {
             ),
 
             const SizedBox(height: 24),
-          
+
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () {
-                  // reset password 
+                  // reset password
                 },
                 child: const Text(
                   "Forgot password?",
-                  style: TextStyle(color: Color(0xFFC69B54)), 
+                  style: TextStyle(color: Color(0xFFC69B54)),
                 ),
               ),
             ),
 
-          
             SizedBox(
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
                   // we add login later
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const HomeScreen(),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF1C1C1C),
@@ -96,7 +101,12 @@ class LoginScreen extends StatelessWidget {
                 const Text("Don't have an account?"),
                 TextButton(
                   onPressed: () {
-                    //TODO: connent to sign up
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SignUpScreen(),
+                      ),
+                    );
                   },
                   child: const Text(
                     "Sign Up",

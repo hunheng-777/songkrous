@@ -1,3 +1,4 @@
+import 'package:final_project/ui/screens/url_scan_screen.dart';
 import 'package:flutter/material.dart';
 import '../widgets/scan_card.dart';
 import '../widgets/recent_item.dart';
@@ -30,7 +31,7 @@ class HomeScreen extends StatelessWidget {
           //       Navigator.push(
           //         context,
           //         MaterialPageRoute(
-          //           builder: (context) => const ProfileScreen(),
+          //           builder: (context) => const UrlScanScreen(),
           //         ),
           //       );
           //     },
@@ -46,10 +47,11 @@ class HomeScreen extends StatelessWidget {
 
             
             Row(
-              children: const [
-                ScanCard(title: "URL Scanner", icon: Icons.link),
+              children:  [
+
+                ScanCard(title: "URL Scanner", icon: Icons.link,screen:UrlScanScreen()),
                 SizedBox(width: 16),
-                ScanCard(title: "QR Scanner", icon: Icons.qr_code_scanner),
+                ScanCard(title: "QR Scanner", icon: Icons.qr_code_scanner,screen:UrlScanScreen()),
               ],
             ),
 
