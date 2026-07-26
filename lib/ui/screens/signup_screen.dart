@@ -1,6 +1,10 @@
 import 'package:final_project/ui/screens/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
+import '../../models/user.dart';
+import '../../data/repositories/auth_repository.dart';
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
@@ -21,6 +25,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool hideConfirmPassword = true;
   bool agreeTerms = false;
   String errorMessage = "";
+  Future<void> signup() async {
+    final url = Uri.parse(
+      "https://final-project-71fa9-default-rtdb.asia-southeast1.firebasedatabase.app/users.json",
+    );
+
+    User newUser = User(
+      name: nameController.text,
+      email: emailController.text,
+      password: passwordController.text,
+    );
+
+    await http.post(url, body: jsonEncode(newUser.toJson()));
+
+    AuthRepository.currentUser = newUser;
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const HomeScreen()),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -179,7 +203,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         if (nameController.text.isEmpty ||
                             emailController.text.isEmpty ||
                             passwordController.text.isEmpty ||
@@ -227,12 +251,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           return;
                         }
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomeScreen(),
-                          ),
-                        );
+                       await signup();
                       },
                       child: Text(
                         "Sign Up",

@@ -3,25 +3,20 @@ import 'package:flutter/material.dart';
 class ScanCard extends StatelessWidget {
   final String title;
   final IconData icon;
-  final Widget screen; 
+  final VoidCallback onTap; 
 
   const ScanCard({
     super.key,
     required this.title,
     required this.icon,
-    required this.screen, 
+    required this.onTap, 
   });
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => screen), 
-          );
-        },
+        onTap: onTap,
         child: Container(
           height: 130,
           decoration: BoxDecoration(

@@ -1,10 +1,14 @@
+import 'package:final_project/data/repositories/auth_repository.dart';
+import 'package:final_project/data/repositories/scan_repository.dart';
+import 'package:final_project/models/scan_result.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/recent_item.dart';
 import 'result_safe_screen.dart';
 import 'result_danger_screen.dart';
 import '../../services/url_check_service.dart';
-
+import '../../models/scan_result.dart';
+import '../../data/repositories/scan_repository.dart';
 class UrlScanScreen extends StatefulWidget {
   const UrlScanScreen({super.key});
 
@@ -15,17 +19,51 @@ class UrlScanScreen extends StatefulWidget {
 class _UrlScanScreenState extends State<UrlScanScreen> {
   TextEditingController urlController = TextEditingController();
 
-  List<Map<String, String>> recentScans = [
-    {"url": "https://google.com", "status": "Safe", "time": "2m ago"},
-    {"url": "http://free-money.xyz", "status": "Danger", "time": "10m ago"},
-    {"url": "https://cadt.edu.kh", "status": "Safe", "time": "25m ago"},
-  ];
+  List<ScanResult> scans = [];
 
   String errorMessage = "";
   bool isLoading = false;
+  @override
+  void initState() {
+    super.initState();
+
+    loadScans();
+  }
+  Future<void> loadScans() async {
+    ScanRepository repository = ScanRepository();
+
+    List<ScanResult> data = await repository.getUserScans(
+      AuthRepository.currentUser!.email,
+    );
+
+    setState(() {
+      scans = data;
+    });
+  }
+
+  
 
   @override
   Widget build(BuildContext context) {
+    Widget historyWidget;
+    if (scans.isEmpty) {
+  historyWidget = Center(
+    child: Text("No Scan History"),
+  );
+} else {
+  historyWidget = ListView.builder(
+    itemCount: scans.length,
+    itemBuilder: (context, index) {
+      return RecentItem(
+        url: scans[index].url,
+        status: scans[index].status,
+        statusColor: scans[index].status == "Safe"
+            ? Colors.green
+            : Colors.red,
+      );
+    },
+  );
+}
     return Scaffold(
       backgroundColor: const Color(0xFFECE4D8),
 
@@ -118,9 +156,18 @@ class _UrlScanScreenState extends State<UrlScanScreen> {
                         UrlCheckService service = UrlCheckService();
 
                         bool isSafe = await service.checkUrl(
-                          urlController.text.trim(),
+                          urlController.text,
                         );
+                        ScanRepository repository = ScanRepository();
 
+                        await repository.saveScan(
+                          ScanResult(
+                            email: AuthRepository.currentUser!.email,
+                            url: urlController.text,
+                            status: isSafe ? "Safe" : "Danger",
+                          ),
+                        );
+                        await loadScans();
                         setState(() {
                           isLoading = false;
                         });
@@ -132,6 +179,7 @@ class _UrlScanScreenState extends State<UrlScanScreen> {
                               builder: (context) => const ResultSafeScreen(),
                             ),
                           );
+                          
                         } else {
                           Navigator.push(
                             context,
@@ -139,6 +187,7 @@ class _UrlScanScreenState extends State<UrlScanScreen> {
                               builder: (context) => const ResultDangerScreen(),
                             ),
                           );
+                          
                         }
                       },
 
@@ -173,15 +222,8 @@ class _UrlScanScreenState extends State<UrlScanScreen> {
             ),
 
             SizedBox(height: 10),
-            const RecentItem(
-              url: "https://google.com",
-              status: "Safe",
-              statusColor: Color.fromARGB(255, 83, 223, 118),
-            ),
-            const RecentItem(
-              url: "http://free-money.xyz",
-              status: "Danger",
-              statusColor: Color(0xFFB23B3B),
+            Expanded(
+              child: historyWidget
             ),
             // Expanded(
             //   child: ListView.builder(

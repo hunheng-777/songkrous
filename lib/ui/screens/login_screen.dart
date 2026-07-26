@@ -1,5 +1,6 @@
 import 'dart:convert';
-
+import '../../models/user.dart';
+import '../../data/repositories/auth_repository.dart';
 import 'package:final_project/ui/screens/home_screen.dart';
 import 'package:final_project/ui/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,9 @@ class _LoginScreenState extends State<LoginScreen> {
     for (var user in data.values) {
       if (user["email"] == emailController.text &&
           user["password"] == passwordController.text) {
+        AuthRepository.currentUser = User(name: user["name"], email: user["email"],password: user["password"]);
         found = true;
+
         break;
       }
     }

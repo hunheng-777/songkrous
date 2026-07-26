@@ -1,14 +1,56 @@
+import 'package:final_project/data/repositories/auth_repository.dart';
+import 'package:final_project/data/repositories/scan_repository.dart';
+import 'package:final_project/models/scan_result.dart';
 import 'package:final_project/ui/screens/url_scan_screen.dart';
 import 'package:flutter/material.dart';
 import '../widgets/scan_card.dart';
 import '../widgets/recent_item.dart';
 import 'profile_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List<ScanResult> scans = [];
+  @override
+  void initState() {
+    super.initState();
+    loadScans();
+  }
+  Future<void> loadScans() async {
+    ScanRepository repository = ScanRepository();
+
+    List<ScanResult> data = await repository.getUserScans(
+      AuthRepository.currentUser!.email,
+    );
+
+    setState(() {
+      scans = data;
+    });
+  }
+  @override
   Widget build(BuildContext context) {
+     Widget historyWidget;
+    if (scans.isEmpty) {
+      historyWidget = Center(child: Text("No Scan History"));
+    } else {
+      historyWidget = ListView.builder(
+        itemCount: scans.length,
+        itemBuilder: (context, index) {
+          return RecentItem(
+            url: scans[index].url,
+            status: scans[index].status,
+            statusColor: scans[index].status == "Safe"
+                ? Colors.green
+                : Colors.red,
+          );
+        },
+      );
+    }
     return Scaffold(
       backgroundColor: const Color(0xFFE9E2D6), 
       body: Padding(
@@ -21,9 +63,9 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children:  [
                     Text(
-                      "Hello, Rainy",
+                      "Hello, ${AuthRepository.currentUser!.name}",
                       style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
@@ -60,9 +102,37 @@ class HomeScreen extends StatelessWidget {
             Row(
               children:  [
 
-                ScanCard(title: "URL Scanner", icon: Icons.link,screen:UrlScanScreen()),
+              ScanCard(
+                  title: "URL Scanner",
+                  icon: Icons.link,
+
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const UrlScanScreen(),
+                      ),
+                    ).then((_) {
+                      loadScans();
+                    });
+                  },
+                ),
                 SizedBox(width: 16),
-                ScanCard(title: "QR Scanner", icon: Icons.qr_code_scanner,screen:UrlScanScreen()),
+                ScanCard(
+                  title: "Qr Scanner",
+                  icon: Icons.link,
+
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const UrlScanScreen(),
+                      ),
+                    ).then((_) {
+                      loadScans();
+                    });
+                  },
+                ),
               ],
             ),
 
@@ -76,16 +146,10 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 12),
 
           
-            const RecentItem(
-              url: "https://google.com",
-              status: "Safe",
-              statusColor: Color(0xFF5B8C6E), 
-            ),
-            const RecentItem(
-              url: "http://free-money.xyz",
-              status: "Danger",
-              statusColor: Color(0xFFB23B3B), 
-            ),
+           Expanded(
+              child: historyWidget
+            )
+
           ],
         ),
       ),
