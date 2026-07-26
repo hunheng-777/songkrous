@@ -1,6 +1,7 @@
 import 'package:final_project/data/repositories/auth_repository.dart';
 import 'package:final_project/data/repositories/scan_repository.dart';
 import 'package:final_project/models/scan_result.dart';
+import 'package:final_project/ui/screens/qr_scan_screen.dart';
 import 'package:final_project/ui/screens/url_scan_screen.dart';
 import 'package:flutter/material.dart';
 import '../widgets/scan_card.dart';
@@ -126,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const UrlScanScreen(),
+                        builder: (context) => const QrScanScreen(),
                       ),
                     ).then((_) {
                       loadScans();

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import '../widgets/result_row.dart';
 
 class ResultDangerScreen extends StatelessWidget {
-  const ResultDangerScreen({super.key});
-
+  const ResultDangerScreen({super.key, required this.threatTypes});
+  final List<String> threatTypes;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,15 +42,14 @@ class ResultDangerScreen extends StatelessWidget {
 
           const SizedBox(height: 30),
 
-          
-           Column(
-              children: const [
-                ResultRow(label: "Status", value: "Dangerous"),
-                ResultRow(label: "Threat Type", value: "Phishing"),
-                ResultRow(label: "Detections", value: "15/90 Vendors"),
-                ResultRow(label: "Scanned", value: "26 Jun 2026"),
-              ],
-            
+          Column(
+            children: [
+              ResultRow(label: "Status", value: "Dangerous"),
+              ResultRow(label: "Threat Type", value: threatTypes.isNotEmpty
+                    ? threatTypes[0]
+                    : "Unknown Threat",
+              ),
+            ],
           ),
         ],
       ),

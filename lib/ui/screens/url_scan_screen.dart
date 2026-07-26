@@ -1,5 +1,6 @@
 import 'package:final_project/data/repositories/auth_repository.dart';
 import 'package:final_project/data/repositories/scan_repository.dart';
+import 'package:final_project/models/safe_browsing_response.dart';
 import 'package:final_project/models/scan_result.dart';
 import 'package:flutter/material.dart';
 
@@ -155,7 +156,7 @@ class _UrlScanScreenState extends State<UrlScanScreen> {
 
                         UrlCheckService service = UrlCheckService();
 
-                        bool isSafe = await service.checkUrl(
+                       SafeBrowsingResponse response = await service.checkUrl(
                           urlController.text,
                         );
                         ScanRepository repository = ScanRepository();
@@ -164,7 +165,7 @@ class _UrlScanScreenState extends State<UrlScanScreen> {
                           ScanResult(
                             email: AuthRepository.currentUser!.email,
                             url: urlController.text,
-                            status: isSafe ? "Safe" : "Danger",
+                            status: response.isThreat ? "Danger" : "Safe",
                           ),
                         );
                         await loadScans();
@@ -172,11 +173,11 @@ class _UrlScanScreenState extends State<UrlScanScreen> {
                           isLoading = false;
                         });
 
-                        if (isSafe) {
+                        if (response.isThreat) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const ResultSafeScreen(),
+                              builder: (context) => ResultDangerScreen(threatTypes: response.threatTypes,),
                             ),
                           );
                           
@@ -184,7 +185,7 @@ class _UrlScanScreenState extends State<UrlScanScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const ResultDangerScreen(),
+                              builder: (context) => const ResultSafeScreen(),
                             ),
                           );
                           

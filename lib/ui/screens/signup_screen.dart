@@ -224,15 +224,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           return;
                         }
 
-                        if (passwordController.text.length < 6) {
-                          setState(() {
-                            errorMessage =
-                                "Password must be at least 6 characters";
-                          });
+                        errorMessage = "";
 
-                          return;
+                        if (passwordController.text.length < 8) {
+                          errorMessage +="• Password must be at least 8 characters\n";
                         }
 
+                        if (!passwordController.text.contains(RegExp(r'[A-Z]'),)) {
+                          errorMessage += "• Uppercase letter is missing\n";
+                        }
+
+                        if (!passwordController.text.contains(RegExp(r'[a-z]'), )) {
+                          errorMessage += "• Lowercase letter is missing\n";
+                        }
+
+                        if (!passwordController.text.contains(RegExp(r'[0-9]'),)) {
+                          errorMessage += "• Number is missing\n";
+                        }
+
+                        if (errorMessage.isNotEmpty) {setState(() {});
+                          return;
+                        }
                         if (passwordController.text !=
                             confirmPasswordController.text) {
                           setState(() {

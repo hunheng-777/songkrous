@@ -45,10 +45,8 @@ class ResultSafeScreen extends StatelessWidget {
          
             Column(
               children: const [
-                ResultRow(label: "Status", value: "Dangerous"),
-                ResultRow(label: "Threat Type", value: "Phishing"),
-                ResultRow(label: "Detections", value: "15/90 Vendors"),
-                ResultRow(label: "Scanned", value: "26 Jun 2026"),
+                ResultRow(label: "Status", value: "Safe"),
+            
               ],
             ),
           
