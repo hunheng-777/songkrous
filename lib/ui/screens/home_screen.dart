@@ -65,6 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children:  [
+                    SizedBox(height: 25,),
                     Text(
                       "Hello, ${AuthRepository.currentUser!.name}",
                       style: TextStyle(

@@ -73,6 +73,7 @@ class _UrlScanScreenState extends State<UrlScanScreen> {
 
         child: Column(
           children: [
+            SizedBox(height:25),
             Row(
               children: [
                 IconButton(
