@@ -26,24 +26,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool agreeTerms = false;
   String errorMessage = "";
   Future<void> signup() async {
-    final url = Uri.parse(
-      "https://final-project-71fa9-default-rtdb.asia-southeast1.firebasedatabase.app/users.json",
-    );
+    try {
+      final url = Uri.parse(
+        "https://final-project-71fa9-default-rtdb.asia-southeast1.firebasedatabase.app/users.json",
+      );
 
-    User newUser = User(
-      name: nameController.text,
-      email: emailController.text,
-      password: passwordController.text,
-    );
+      User newUser = User(
+        name: nameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+      );
 
-    await http.post(url, body: jsonEncode(newUser.toJson()));
+      await http.post(url, body: jsonEncode(newUser.toJson()));
 
-    AuthRepository.currentUser = newUser;
+      AuthRepository.currentUser = newUser;
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
-    );
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+    } catch (e) {
+      setState(() {
+        errorMessage = "No internet connection";
+      });
+    }
   }
   @override
   Widget build(BuildContext context) {

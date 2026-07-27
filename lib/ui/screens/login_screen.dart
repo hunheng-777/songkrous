@@ -17,34 +17,44 @@ class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   String errorMessage = "";
-  Future<void> login() async {
-    final url = Uri.parse(
-      "https://final-project-71fa9-default-rtdb.asia-southeast1.firebasedatabase.app/users.json",
-    );
-
-    final response = await http.get(url);
-    final data = jsonDecode(response.body) as Map;
-
-    bool found = false;
-
-    for (var user in data.values) {
-      if (user["email"] == emailController.text &&
-          user["password"] == passwordController.text) {
-        AuthRepository.currentUser = User(name: user["name"], email: user["email"],password: user["password"]);
-        found = true;
-
-        break;
-      }
-    }
-
-    if (found) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
+Future<void> login() async {
+    try {
+      final url = Uri.parse(
+        "https://final-project-71fa9-default-rtdb.asia-southeast1.firebasedatabase.app/users.json",
       );
-    } else {
+
+      final response = await http.get(url);
+      final data = jsonDecode(response.body) as Map;
+
+      bool found = false;
+
+      for (var user in data.values) {
+        if (user["email"] == emailController.text &&
+            user["password"] == passwordController.text) {
+          AuthRepository.currentUser = User(
+            name: user["name"],
+            email: user["email"],
+            password: user["password"],
+          );
+
+          found = true;
+          break;
+        }
+      }
+
+      if (found) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
+      } else {
+        setState(() {
+          errorMessage = "Wrong email or password";
+        });
+      }
+    } catch (e) {
       setState(() {
-        errorMessage = "Wrong email or password";
+        errorMessage = "No internet connection";
       });
     }
   }

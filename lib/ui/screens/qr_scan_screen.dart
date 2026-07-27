@@ -7,7 +7,6 @@ import 'package:final_project/ui/screens/result_safe_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../services/url_check_service.dart';
-import '../../services/qr_service.dart';
 
 class QrScanScreen extends StatefulWidget {
   const QrScanScreen({super.key});
@@ -18,14 +17,14 @@ class QrScanScreen extends StatefulWidget {
 
 class _QrScanScreenState extends State<QrScanScreen> {
   bool isChecking = false;
+  String errorMessage = "";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF1C1C1C),
-        // foregroundColor: Colors.white,
-        title: const Text("Scan QR Code"),
+        title: Text(errorMessage.isEmpty ? "Scan QR Code" : errorMessage),
       ),
       body: MobileScanner(
         onDetect: (capture) async {
@@ -36,32 +35,46 @@ class _QrScanScreenState extends State<QrScanScreen> {
 
           setState(() => isChecking = true);
 
-          final service = UrlCheckService();
-          SafeBrowsingResponse response = await service.checkUrl(link);
-          ScanRepository repository = ScanRepository();
+          try {
+            final service = UrlCheckService();
 
-          await repository.saveScan(
-            ScanResult(
-              email: AuthRepository.currentUser!.email,
-              url: link,
-              status: response.isThreat ? "Danger" : "Safe",
-            ),
-          );
-          if (!mounted) return;
+            SafeBrowsingResponse response = await service.checkUrl(link);
 
-          if (response.isThreat) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    ResultDangerScreen(threatTypes: response.threatTypes),
+            ScanRepository repository = ScanRepository();
+
+            await repository.saveScan(
+              ScanResult(
+                email: AuthRepository.currentUser!.email,
+                url: link,
+                status: response.isThreat ? "Danger" : "Safe",
               ),
             );
-          } else {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const ResultSafeScreen()),
-            );
+
+            if (!mounted) return;
+
+            if (response.isThreat) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      ResultDangerScreen(threatTypes: response.threatTypes),
+                ),
+              );
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ResultSafeScreen(),
+                ),
+              );
+            }
+          } catch (e) {
+            if (!mounted) return;
+
+            setState(() {
+              isChecking = false;
+              errorMessage = "No internet connection";
+            });
           }
         },
       ),

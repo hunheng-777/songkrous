@@ -141,12 +141,11 @@ class _UrlScanScreenState extends State<UrlScanScreen> {
                         backgroundColor: Colors.black,
                       ),
 
-                      onPressed: () async {
+onPressed: () async {
                         if (urlController.text.isEmpty) {
                           setState(() {
                             errorMessage = "Please enter a URL";
                           });
-
                           return;
                         }
 
@@ -155,41 +154,50 @@ class _UrlScanScreenState extends State<UrlScanScreen> {
                           isLoading = true;
                         });
 
-                        UrlCheckService service = UrlCheckService();
+                        try {
+                          UrlCheckService service = UrlCheckService();
 
-                       SafeBrowsingResponse response = await service.checkUrl(
-                          urlController.text,
-                        );
-                        ScanRepository repository = ScanRepository();
+                          SafeBrowsingResponse response = await service
+                              .checkUrl(urlController.text);
 
-                        await repository.saveScan(
-                          ScanResult(
-                            email: AuthRepository.currentUser!.email,
-                            url: urlController.text,
-                            status: response.isThreat ? "Danger" : "Safe",
-                          ),
-                        );
-                        await loadScans();
-                        setState(() {
-                          isLoading = false;
-                        });
+                          ScanRepository repository = ScanRepository();
 
-                        if (response.isThreat) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ResultDangerScreen(threatTypes: response.threatTypes,),
+                          await repository.saveScan(
+                            ScanResult(
+                              email: AuthRepository.currentUser!.email,
+                              url: urlController.text,
+                              status: response.isThreat ? "Danger" : "Safe",
                             ),
                           );
-                          
-                        } else {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ResultSafeScreen(),
-                            ),
-                          );
-                          
+
+                          await loadScans();
+
+                          setState(() {
+                            isLoading = false;
+                          });
+
+                          if (response.isThreat) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ResultDangerScreen(
+                                  threatTypes: response.threatTypes,
+                                ),
+                              ),
+                            );
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ResultSafeScreen(),
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          setState(() {
+                            isLoading = false;
+                            errorMessage = "No internet connection";
+                          });
                         }
                       },
 
@@ -227,19 +235,6 @@ class _UrlScanScreenState extends State<UrlScanScreen> {
             Expanded(
               child: historyWidget
             ),
-            // Expanded(
-            //   child: ListView.builder(
-            //     itemCount: allScans.length > 4 ? 4 : allScans.length, // max 4
-            //     itemBuilder: (context, index) {
-            //       final scan = allScans[index];
-            //       return RecentItem(
-            //         url: scan["url"],
-            //         status: scan["status"],
-            //         statusColor: scan["color"],
-            //       );
-            //     },
-            //   ),
-            // ),
           ],
         ),
       ),
