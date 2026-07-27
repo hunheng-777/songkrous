@@ -17,15 +17,48 @@ class QrScanScreen extends StatefulWidget {
 
 class _QrScanScreenState extends State<QrScanScreen> {
   bool isChecking = false;
-  String errorMessage = "";
+  bool noInternet = false;
 
   @override
   Widget build(BuildContext context) {
+    
+    if (noInternet) {
+      return Scaffold(
+        backgroundColor: const Color(0xFFECE4D8),
+
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF1C1C1C),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+
+        body: const Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.wifi_off, size: 80, color: Color(0xFFB23B3B)),
+              SizedBox(height: 20),
+              Text(
+                "No Internet Connection",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF1C1C1C),
-        title: Text(errorMessage.isEmpty ? "Scan QR Code" : errorMessage),
+        title: const Text("Scan QR Code"),
       ),
+
       body: MobileScanner(
         onDetect: (capture) async {
           if (isChecking) return;
@@ -72,8 +105,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
             if (!mounted) return;
 
             setState(() {
-              isChecking = false;
-              errorMessage = "No internet connection";
+              noInternet = true;
             });
           }
         },
