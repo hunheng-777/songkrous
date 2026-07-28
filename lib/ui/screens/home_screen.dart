@@ -92,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   icon: const Icon(
                     Icons.person,
-                    color: Color(0xFFC69B54), // gold
+                    color: Color(0xFFC69B54),
                     size: 32,
                   ),
                 ),
